@@ -1,77 +1,130 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-#include "database.h"
 
-int main()
+#include "database.h"
+#include "parser.h"
+
+int main(void)
 {
     Database db;
     char command[1024];
-    char table_name[100];
 
     database_init(&db);
 
     printf("============================================\n");
-    printf("       SHELL BASED DATABASE MANAGER\n");
+    printf("     SHELL BASED DATABASE MANAGER\n");
     printf("============================================\n");
-    printf("Type 'help' to see available commands.\n\n");
+    printf("Type 'help' to see available commands.\n");
 
     while (1)
     {
         printf("db> ");
 
         if (fgets(command, sizeof(command), stdin) == NULL)
-            break;
-
-        command[strcspn(command, "\n")] = '\0';
-
-        if (strcmp(command, "exit") == 0)
         {
-            printf("Exiting Database Manager...\n");
             break;
         }
 
-        else if (strcmp(command, "help") == 0)
+        char **tokens = parse_command(command);
+
+        if (tokens[0] == NULL)
+        {
+            free_tokens(tokens);
+            continue;
+        }
+
+        /* EXIT */
+        if (strcmp(tokens[0], "exit") == 0)
+        {
+            free_tokens(tokens);
+            break;
+        }
+
+        /* HELP */
+        else if (strcmp(tokens[0], "help") == 0)
         {
             printf("\nAvailable Commands:\n");
             printf("  create <table>  - Create a new table\n");
             printf("  insert <table>  - Insert a row into a table\n");
             printf("  select <table>  - Display table data\n");
-            printf("  show tables     - Show all tables\n");
+            printf("  show tables      - Show all tables\n");
             printf("  drop <table>    - Delete a table\n");
             printf("  help             - Show this help menu\n");
-            printf("  exit             - Exit the program\n\n");
+            printf("  exit             - Exit the program\n");
         }
 
-        else if (strcmp(command, "show tables") == 0)
+        /* SHOW TABLES */
+        else if (strcmp(tokens[0], "show") == 0 &&
+                 tokens[1] != NULL &&
+                 strcmp(tokens[1], "tables") == 0)
         {
             database_show_tables(&db);
         }
 
-        else if (sscanf(command, "create %99s", table_name) == 1)
+        /* CREATE */
+        else if (strcmp(tokens[0], "create") == 0)
         {
-            database_create_table(&db, table_name);
+            if (tokens[1] == NULL)
+            {
+                printf("Error: table name is required.\n");
+            }
+            else
+            {
+                database_create_table(&db, tokens[1]);
+            }
         }
 
-        else if (sscanf(command, "insert %99s", table_name) == 1)
+        /* INSERT */
+        else if (strcmp(tokens[0], "insert") == 0)
         {
-            database_insert(&db, table_name);
+            if (tokens[1] == NULL)
+            {
+                printf("Error: table name is required.\n");
+            }
+            else
+            {
+                database_insert(&db, tokens[1]);
+            }
         }
 
-        else if (sscanf(command, "select %99s", table_name) == 1)
+        /* SELECT */
+        else if (strcmp(tokens[0], "select") == 0)
         {
-            database_select(&db, table_name);
+            if (tokens[1] == NULL)
+            {
+                printf("Error: table name is required.\n");
+            }
+            else
+            {
+                database_select(&db, tokens[1]);
+            }
         }
 
-        else if (sscanf(command, "drop %99s", table_name) == 1)
+        /* DROP */
+        else if (strcmp(tokens[0], "drop") == 0)
         {
-            database_drop_table(&db, table_name);
+            if (tokens[1] == NULL)
+            {
+                printf("Error: table name is required.\n");
+            }
+            else
+            {
+                database_drop_table(&db, tokens[1]);
+            }
         }
 
-        else if (strlen(command) > 0)
+        /* UNKNOWN COMMAND */
+        else
         {
-            printf("Unknown command. Type 'help' for available commands.\n");
+            printf("Error: Unknown command '%s'.\n", tokens[0]);
+            printf("Type 'help' to see available commands.\n");
         }
+
+        free_tokens(tokens);
     }
+
+    printf("Exiting Database Manager...\n");
 
     return 0;
 }
