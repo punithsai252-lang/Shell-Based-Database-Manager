@@ -4,6 +4,7 @@
 
 #include "database.h"
 #include "parser.h"
+#include "process.h"
 
 int main(void)
 {
@@ -52,6 +53,8 @@ int main(void)
             printf("  drop <table>    - Delete a table\n");
             printf("  help             - Show this help menu\n");
             printf("  exit             - Exit the program\n");
+            printf("\nExternal Linux Commands:\n");
+            printf("  ls, pwd, date, whoami, etc.\n");
         }
 
         /* SHOW TABLES */
@@ -114,11 +117,10 @@ int main(void)
             }
         }
 
-        /* UNKNOWN COMMAND */
+        /* EXTERNAL LINUX COMMAND */
         else
         {
-            printf("Error: Unknown command '%s'.\n", tokens[0]);
-            printf("Type 'help' to see available commands.\n");
+            execute_command(tokens);
         }
 
         free_tokens(tokens);
