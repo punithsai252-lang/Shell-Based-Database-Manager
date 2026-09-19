@@ -2,66 +2,119 @@
 
 ## Project Overview
 
-The **Shell Based Database Manager** is a command-line database management system developed using the **C programming language** on **Ubuntu/Linux**.
+The **Shell Based Database Manager** is a command-line database management system developed using **C programming on Linux/Ubuntu**.
 
-The project provides a simple shell interface through which users can interact with a database using commands. It demonstrates concepts of **Operating Systems, Systems Programming, C programming, dynamic memory management, modular programming, and command processing**.
+The project demonstrates concepts from:
 
-The main goal of the project is to understand how a shell can accept user commands, process the input, and perform database operations.
+- Operating Systems
+- Systems Programming
+- C Programming
+- Command Processing
+- Dynamic Memory Management
+- Modular Programming
+- Process Execution
+
+The system provides an interactive command-line interface where users can perform database operations and execute selected Linux/system commands.
 
 ---
 
-## Objectives
+## Project Objectives
 
-The main objectives of the project are:
-
-- To develop a database manager using C.
-- To provide a command-line shell interface.
-- To implement basic database operations.
-- To understand dynamic memory allocation.
-- To implement user input handling.
-- To organize the program into multiple modules.
-- To compile and manage the project using Makefile.
-- To use Git and GitHub for version control.
+- Develop an interactive command-line database manager.
+- Implement command input and parsing.
+- Tokenize user commands for processing.
+- Implement basic database operations.
+- Support selected Linux/system commands.
+- Use modular C programming.
+- Demonstrate process execution in Linux.
+- Maintain the project using Git and GitHub.
 
 ---
 
 ## Features
 
-The Shell Based Database Manager provides the following features:
+### Database Operations
 
-- Interactive command-line shell
-- Database initialization
-- Create tables
-- Show available tables
-- Insert records
-- Select records
-- Drop tables
-- Dynamic user input
-- Dynamic memory allocation using `malloc()`
-- Dynamic memory resizing using `realloc()`
-- Modular C programming
-- Makefile-based compilation
-- Git/GitHub project management
+- `create`
+- `insert`
+- `select`
+- `show tables`
+- `drop`
+
+### System / External Commands
+
+- `pwd`
+- `whoami`
+- `date`
+- `ls`
+
+### Built-in Commands
+
+The project provides built-in command handling through the command-processing architecture.
 
 ---
 
-## Project Structure
+## Command Processing
+
+The command-processing workflow is:
 
 ```text
-Shell-Based-Database-Manager/
-│
-├── bin/
-│   └── shellforge
-│
-├── include/
-│   ├── database.h
-│   ├── input.h
-│   └── shell.h
-│
-├── src/
-│   ├── database.c
-│   ├── input.c
-│   └── main.c
-│
-├── Makefile
-└── README.md
+User Input
+    ↓
+Read Command
+    ↓
+Command Parsing
+    ↓
+Tokenization
+    ↓
+Command Identification
+    ↓
+Command Dispatch
+    ↓
+Module Execution
+    ↓
+Output
+
+---
+
+## System Architecture
+
+```text
+                    USER
+                     |
+                     v
+             COMMAND LINE INPUT
+                     |
+                     v
+               COMMAND PARSER
+                     |
+                     v
+             COMMAND DISPATCHER
+                  /       \
+                 /         \
+                v           v
+       DATABASE MODULE    BUILTIN /
+                           PROCESS MODULE
+                |              |
+                v              v
+       DATABASE OPERATIONS   SYSTEM COMMANDS
+                \              /
+                 \            /
+                  v          v
+                     OUTPUT
+
+---
+
+## Tokenization Examples
+
+### Example 1
+
+Input:
+
+```text
+create students
+tokens[0] = create
+tokens[1] = students
+show tables
+tokens[0] = show
+tokens[1] = tables

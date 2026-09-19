@@ -1,0 +1,17 @@
+# Compiled object files
+*.o
+
+# Executables
+*.out
+
+# Temporary files
+*.tmp
+*.swp
+*~
+
+# OS files
+.DS_Store
+
+# Editor files
+.vscode/
+.idea/
