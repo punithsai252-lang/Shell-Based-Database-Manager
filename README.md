@@ -13,6 +13,8 @@ The project demonstrates concepts from:
 - Dynamic Memory Management
 - Modular Programming
 - Process Execution
+- Signal Handling
+- Process Control
 
 The system provides an interactive command-line interface where users can perform database operations and execute selected Linux/system commands.
 
@@ -27,6 +29,8 @@ The system provides an interactive command-line interface where users can perfor
 - Support selected Linux/system commands.
 - Use modular C programming.
 - Demonstrate process execution in Linux.
+- Implement signal handling.
+- Prevent zombie child processes.
 - Maintain the project using Git and GitHub.
 
 ---
@@ -41,77 +45,64 @@ The system provides an interactive command-line interface where users can perfor
 - `show tables`
 - `drop`
 
-### System / External Commands
+### Built-in Commands
 
+- `help`
 - `pwd`
 - `whoami`
 - `date`
 - `ls`
+- `exit`
 
-### Built-in Commands
+### Process Execution
 
-The project provides built-in command handling through the command-processing architecture.
+The project supports execution of external Linux commands using process creation and execution concepts.
 
----
+The system uses:
 
-## Command Processing
+- `fork()`
+- `execvp()`
+- `waitpid()`
 
-The command-processing workflow is:
+to manage child processes.
 
-```text
-User Input
-    ↓
-Read Command
-    ↓
-Command Parsing
-    ↓
-Tokenization
-    ↓
-Command Identification
-    ↓
-Command Dispatch
-    ↓
-Module Execution
-    ↓
-Output
+### Signal Handling
+
+Week 6 introduces signal handling for:
+
+- `SIGINT`
+- `SIGCHLD`
+
+The system handles `Ctrl+C` without immediately terminating the database manager and reaps completed child processes to prevent zombie processes.
 
 ---
 
 ## System Architecture
 
 ```text
-                    USER
-                     |
-                     v
-             COMMAND LINE INPUT
-                     |
-                     v
-               COMMAND PARSER
-                     |
-                     v
-             COMMAND DISPATCHER
-                  /       \
-                 /         \
-                v           v
-       DATABASE MODULE    BUILTIN /
-                           PROCESS MODULE
-                |              |
-                v              v
-       DATABASE OPERATIONS   SYSTEM COMMANDS
-                \              /
-                 \            /
-                  v          v
+                         USER
+                           |
+                           v
+                  COMMAND LINE INPUT
+                           |
+                           v
+                    COMMAND PARSER
+                           |
+                           v
+                   COMMAND DISPATCHER
+                     /            \
+                    /              \
+                   v                v
+          DATABASE MODULE      BUILTIN /
+                               PROCESS MODULE
+                |                  |
+                v                  v
+       DATABASE OPERATIONS    SYSTEM COMMANDS
+                \                  /
+                 \                /
+                  \              /
+                       v
                      OUTPUT
-
----
-
-## Tokenization Examples
-
-### Example 1
-
-Input:
-
-```text
 create students
 tokens[0] = create
 tokens[1] = students

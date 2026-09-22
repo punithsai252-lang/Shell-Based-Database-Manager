@@ -5,6 +5,7 @@
 #include "database.h"
 #include "parser.h"
 #include "process.h"
+#include "signals.h"
 
 int main(void)
 {
@@ -13,9 +14,12 @@ int main(void)
 
     database_init(&db);
 
-    printf("============================================\n");
-    printf("     SHELL BASED DATABASE MANAGER\n");
-    printf("============================================\n");
+    /* Initialize signal handlers */
+    initialize_signals();
+
+    printf("========================================\n");
+    printf("      SHELL BASED DATABASE MANAGER\n");
+    printf("========================================\n");
     printf("Type 'help' to see available commands.\n");
 
     while (1)
@@ -53,6 +57,7 @@ int main(void)
             printf("  drop <table>    - Delete a table\n");
             printf("  help             - Show this help menu\n");
             printf("  exit             - Exit the program\n");
+
             printf("\nExternal Linux Commands:\n");
             printf("  ls, pwd, date, whoami, etc.\n");
         }
