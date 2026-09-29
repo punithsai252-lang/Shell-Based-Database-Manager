@@ -6,6 +6,7 @@
 #include "parser.h"
 #include "process.h"
 #include "signals.h"
+#include "pipes.h"
 
 int main(void)
 {
@@ -29,6 +30,36 @@ int main(void)
         if (fgets(command, sizeof(command), stdin) == NULL)
         {
             break;
+        }
+
+        /* PIPE HANDLING */
+        char *pipe_pos = strchr(command, '|');
+
+        if (pipe_pos != NULL)
+        {
+            *pipe_pos = '\0';
+
+            char *left_command = command;
+            char *right_command = pipe_pos + 1;
+
+            char **left_tokens = parse_command(left_command);
+            char **right_tokens = parse_command(right_command);
+
+            if (left_tokens[0] == NULL || right_tokens[0] == NULL)
+            {
+                printf("Error: both commands are required for a pipe.\n");
+
+                free_tokens(left_tokens);
+                free_tokens(right_tokens);
+                continue;
+            }
+
+            execute_pipe(left_tokens, right_tokens);
+
+            free_tokens(left_tokens);
+            free_tokens(right_tokens);
+
+            continue;
         }
 
         char **tokens = parse_command(command);
