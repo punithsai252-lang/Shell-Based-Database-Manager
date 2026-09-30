@@ -2,42 +2,34 @@
 
 ## Project Overview
 
-The **Shell Based Database Manager** is a command-line database management system developed using **C programming on Linux/Ubuntu**.
+**Shell Based Database Manager** is a command-line database management system developed in **C programming language** for Linux/Ubuntu.
 
-The project demonstrates concepts from:
+The project combines concepts from Operating Systems, Systems Programming, C Programming, Command-Line Interfaces, Process Management, Inter-Process Communication, Dynamic Memory Management, Signal Handling, Modular Programming, and Memory Testing.
 
-- Operating Systems
-- Systems Programming
-- C Programming
-- Command Processing
-- Dynamic Memory Management
-- Modular Programming
-- Process Execution
-- Signal Handling
-- Process Control
-
-The system provides an interactive command-line interface where users can perform database operations and execute selected Linux/system commands.
+The system provides an interactive shell where users can perform database operations and execute Linux/system commands.
 
 ---
 
-## Project Objectives
+## Objectives
 
-- Develop an interactive command-line database manager.
-- Implement command input and parsing.
-- Tokenize user commands for processing.
-- Implement basic database operations.
-- Support selected Linux/system commands.
-- Use modular C programming.
-- Demonstrate process execution in Linux.
+- Implement an interactive command-line database manager.
+- Handle and process user commands.
+- Tokenize and parse commands.
+- Implement database operations.
+- Support Linux/system commands.
+- Implement process creation and execution.
 - Implement signal handling.
-- Prevent zombie child processes.
-- Maintain the project using Git and GitHub.
+- Implement inter-process communication using pipes.
+- Manage dynamically allocated memory.
+- Perform memory testing.
+- Maintain a modular C programming structure.
+- Use Git and GitHub for version control.
 
 ---
 
 ## Features
 
-### Database Operations
+### Database Commands
 
 - `create`
 - `insert`
@@ -45,67 +37,134 @@ The system provides an interactive command-line interface where users can perfor
 - `show tables`
 - `drop`
 
-### Built-in Commands
+### System Commands
 
-- `help`
 - `pwd`
 - `whoami`
 - `date`
 - `ls`
-- `exit`
 
-### Process Execution
+### Process Management
 
-The project supports execution of external Linux commands using process creation and execution concepts.
-
-The system uses:
-
-- `fork()`
-- `execvp()`
-- `waitpid()`
-
-to manage child processes.
+- Process creation using `fork()`
+- External command execution
+- Parent-child process management
+- Process synchronization
 
 ### Signal Handling
 
-Week 6 introduces signal handling for:
-
 - `SIGINT`
 - `SIGCHLD`
+- Ctrl+C handling
+- Child-process cleanup
+- Zombie-process prevention
 
-The system handles `Ctrl+C` without immediately terminating the database manager and reaps completed child processes to prevent zombie processes.
+### Pipe Support
+
+- Pipe operator `|`
+- Pipe creation using `pipe()`
+- Inter-Process Communication
+- Connecting command output to another command's input
+
+### Memory Testing
+
+- AddressSanitizer support
+- Valgrind testing
+- Memory leak detection
+- Heap allocation/deallocation testing
 
 ---
 
-## System Architecture
+## Command Processing Workflow
 
 ```text
-                         USER
+User Input
+    ↓
+Input Handling
+    ↓
+Command Parsing
+    ↓
+Tokenization
+    ↓
+Command Identification
+    ↓
+Built-in / Database / System Command
+    ↓
+Process Execution
+    ↓
+Pipe / Signal Handling
+    ↓
+Command Output
+                 +----------------------+
+                 |      User Input      |
+                 +----------+-----------+
+                            |
+                            v
+                 +----------------------+
+                 |    Input Handling    |
+                 +----------+-----------+
+                            |
+                            v
+                 +----------------------+
+                 |  Parser / Tokenizer  |
+                 +----------+-----------+
+                            |
+              +-------------+-------------+
+              |                           |
+              v                           v
+      +---------------+           +---------------+
+      | Built-in / DB |           | External Cmd  |
+      |   Commands    |           |   Execution   |
+      +-------+-------+           +-------+-------+
+              |                           |
+              v                           v
+      +---------------+           +---------------+
+      | Database      |           | fork / exec   |
+      | Operations    |           | Process Mgmt  |
+      +---------------+           +---------------+
+
+                    Process Control
                            |
-                           v
-                  COMMAND LINE INPUT
-                           |
-                           v
-                    COMMAND PARSER
-                           |
-                           v
-                   COMMAND DISPATCHER
-                     /            \
-                    /              \
-                   v                v
-          DATABASE MODULE      BUILTIN /
-                               PROCESS MODULE
-                |                  |
-                v                  v
-       DATABASE OPERATIONS    SYSTEM COMMANDS
-                \                  /
-                 \                /
-                  \              /
-                       v
-                     OUTPUT
-create students
-tokens[0] = create
-tokens[1] = students
-show tables
-tokens[0] = show
-tokens[1] = tables
+                 +---------+---------+
+                 |                   |
+              Signals              Pipes
+                 |                   |
+           SIGINT / SIGCHLD        pipe()
+
+           Shell-Based-Database-Manager/
+│
+├── bin/
+│   └── shellforge
+│
+├── docs/
+│   └── .gitkeep
+│
+├── include/
+│   ├── builtin.h
+│   ├── database.h
+│   ├── input.h
+│   ├── parser.h
+│   ├── process.h
+│   ├── shell.h
+│   └── signals.h
+│
+├── screenshots/
+│   └── .gitkeep
+│
+├── src/
+│   ├── builtin.c
+│   ├── database.c
+│   ├── input.c
+│   ├── main.c
+│   ├── parser.c
+│   ├── process.c
+│   ├── signals.c
+│   └── pipes.c
+│
+├── tests/
+│   ├── parser_test
+│   └── parser_test.c
+│
+├── .gitignore
+├── Makefile
+└── README.md
