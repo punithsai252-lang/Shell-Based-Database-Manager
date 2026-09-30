@@ -95,6 +95,28 @@ Process Execution
 Pipe / Signal Handling
     ↓
 Command Output
+---
+
+## Command Processing Workflow
+
+```text
+User Input
+    ↓
+Input Handling
+    ↓
+Command Parsing
+    ↓
+Tokenization
+    ↓
+Command Identification
+    ↓
+Built-in / Database / System Command
+    ↓
+Process Execution
+    ↓
+Pipe / Signal Handling
+    ↓
+Command Output
                  +----------------------+
                  |      User Input      |
                  +----------+-----------+
