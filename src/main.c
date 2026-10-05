@@ -7,6 +7,7 @@
 #include "process.h"
 #include "signals.h"
 #include "pipes.h"
+#include "redirect.h"
 
 int main(void)
 {
@@ -156,7 +157,7 @@ int main(void)
         /* EXTERNAL LINUX COMMAND */
         else
         {
-            execute_command(tokens);
+            if (execute_redirection(tokens) == 0) execute_command(tokens);
         }
 
         free_tokens(tokens);
