@@ -1,8 +1,7 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -g -Iinclude
+CFLAGS = -Wall -Wextra -g -Iinclude -pthread
 ASAN_FLAGS = -fsanitize=address -fno-omit-frame-pointer
-
-SRC = src/main.c src/database.c src/input.c src/parser.c src/process.c src/builtin.c src/signals.c src/pipes.c src/redirect.c
+SRC = src/main.c src/database.c src/input.c src/parser.c src/process.c src/builtin.c src/signals.c src/pipes.c src/redirect.c src/thread.c
 TARGET = bin/shellforge
 
 all: $(TARGET)

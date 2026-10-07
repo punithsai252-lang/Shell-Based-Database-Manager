@@ -8,6 +8,7 @@
 #include "signals.h"
 #include "pipes.h"
 #include "redirect.h"
+#include "thread.h"
 
 int main(void)
 {
@@ -18,6 +19,7 @@ int main(void)
 
     /* Initialize signal handlers */
     initialize_signals();
+    start_monitor_thread();
 
     printf("========================================\n");
     printf("      SHELL BASED DATABASE MANAGER\n");
